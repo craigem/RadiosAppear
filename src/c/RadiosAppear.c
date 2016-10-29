@@ -129,7 +129,7 @@ static void main_window_load(Window *window) {
 
   // Create the TextLayer with specific bounds
   s_time_layer = text_layer_create(
-    GRect(41, PBL_IF_ROUND_ELSE(70, 64), 65, 33));
+    GRect(PBL_IF_ROUND_ELSE(59, 41), PBL_IF_ROUND_ELSE(70, 64), 65, 33));
 
   // Improve the layout to be more like a watchface
   text_layer_set_background_color(s_time_layer, GColorBlack);
