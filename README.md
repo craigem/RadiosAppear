@@ -10,6 +10,7 @@ This is a [Radio Birdman](http://www.radiobirdman.com/) themed watchface for Peb
 **Features**
 
 * Radio Birdman logo
-* Tells the Time
+* Tells the Time (digital only at present)
+* Bluetooth status (vibrate and icon)
 
 Not much really, not yet anyway. More to come.
