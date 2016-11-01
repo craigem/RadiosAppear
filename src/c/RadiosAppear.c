@@ -204,8 +204,8 @@ static void main_window_unload(Window *window) {
 //  layer_destroy(s_battery_layer);
 
   // Destroy Bluetooth indicator
-//  gbitmap_destroy(s_bt_icon_bitmap);
-//  bitmap_layer_destroy(s_bt_icon_layer);
+  gbitmap_destroy(s_bt_icon_bitmap);
+  bitmap_layer_destroy(s_bt_icon_layer);
 }
 
 static void init() {
