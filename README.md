@@ -12,5 +12,10 @@ This is a [Radio Birdman](http://www.radiobirdman.com/) themed watchface for Peb
 * Radio Birdman logo
 * Tells the Time (digital only at present)
 * Bluetooth status (vibrate and icon)
+* Battery status icon (when < 30%)
 
-Not much really, not yet anyway. More to come.
+**Next**
+* Configurable alternate colour scheme.
+* Configurable alternate analogue interface.
+* Configurable weather.
+* Configurable health information.
