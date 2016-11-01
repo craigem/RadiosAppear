@@ -3,16 +3,15 @@
 static Window *s_main_window;
 static TextLayer *s_time_layer;
 //static TextLayer *s_weather_layer;
-//static Layer *s_battery_layer;
 
-static BitmapLayer *s_background_layer, *s_bt_icon_layer;
-static GBitmap *s_background_bitmap, *s_bt_icon_bitmap;
+static BitmapLayer *s_background_layer, *s_bt_icon_layer, *s_battery_icon_layer;
+static GBitmap *s_background_bitmap, *s_bt_icon_bitmap, *s_battery_icon_bitmap;
 
 // Declare globally
 static GFont s_time_font;
 //static GFont s_weather_font;
 
-//static int s_battery_level;
+static int s_battery_level;
 
 static void bluetooth_callback(bool connected) {
   // Show icon if disconnected
@@ -24,13 +23,20 @@ static void bluetooth_callback(bool connected) {
   }
 }
 
-//static void battery_callback(BatteryChargeState state) {
+static void battery_callback(BatteryChargeState state) {
   // Record the new battery level
-//  s_battery_level = state.charge_percent;
+  s_battery_level = state.charge_percent;
 
-  // Update meter
-//  layer_mark_dirty(s_battery_layer);
-//}
+  // Hide the battery icon by default
+  layer_set_hidden(bitmap_layer_get_layer(s_battery_icon_layer), s_battery_level >= 30);
+
+  // This vibrate on every check. Need to set this to only vibrate once.
+  // notify the user
+  //if(s_battery_level <= 30) {
+    // Issue a vibrating alert
+  //  vibes_double_pulse();
+  //}
+}
 
 //static void inbox_received_callback( DictionaryIterator *iterator, void *context) {
   // Store incoming information
@@ -79,21 +85,6 @@ static void update_time() {
   // Display this time on the TextLayer
   text_layer_set_text(s_time_layer, s_buffer);
 }
-
-//static void battery_update_proc(Layer *layer, GContext *ctx) {
-//  GRect bounds = layer_get_bounds(layer);
-
-  // Find the width of the bar
-//  int width = (int)(float)(((float)s_battery_level / 100.0F) * 114.0F);
-
-  // Draw the background
-//  graphics_context_set_fill_color(ctx, GColorBlack);
-//  graphics_fill_rect(ctx, bounds, 0, GCornerNone);
-
-  // Draw the bar
-//  graphics_context_set_fill_color(ctx, GColorWhite);
-//  graphics_fill_rect(ctx, GRect(0, 0, width, bounds.size.h), 0, GCornerNone);
-//}
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
   update_time();
@@ -164,12 +155,13 @@ static void main_window_load(Window *window) {
 //  layer_add_child(window_get_root_layer(window),
 //    text_layer_get_layer(s_weather_layer));
 
-  // Create battery meter Layer
-//  s_battery_layer = layer_create(GRect(14, 0, 115, 2));
-//  layer_set_update_proc(s_battery_layer, battery_update_proc);
+  // Create battery icon Layer
+  s_battery_icon_layer = bitmap_layer_create(GRect(58, 45, 30, 30));
+  s_battery_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_ICON);
+  bitmap_layer_set_bitmap(s_battery_icon_layer, s_battery_icon_bitmap);
 
   // Add to window
-//  layer_add_child(window_get_root_layer(window), s_battery_layer);
+  layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_battery_icon_layer));
 
   // Create the Bluetooth icon GBitmap
   s_bt_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BT_ICON);
@@ -201,7 +193,8 @@ static void main_window_unload(Window *window) {
 //  fonts_load_custom_font(s_weather_font);
 
   // Destroy battery level
-//  layer_destroy(s_battery_layer);
+  gbitmap_destroy(s_battery_icon_bitmap);
+  bitmap_layer_destroy(s_battery_icon_layer);
 
   // Destroy Bluetooth indicator
   gbitmap_destroy(s_bt_icon_bitmap);
@@ -242,10 +235,10 @@ static void init() {
 //  app_message_open(inbox_size, outbox_size);
 
   // Register for battery level updates
-//  battery_state_service_subscribe(battery_callback);
+  battery_state_service_subscribe(battery_callback);
 
   // Ensure battery level is displayed from the start
-//  battery_callback(battery_state_service_peek());
+  battery_callback(battery_state_service_peek());
 
   // Register for Bluetooth connection updates
   connection_service_subscribe((ConnectionHandlers) {
