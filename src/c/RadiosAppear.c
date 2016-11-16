@@ -28,7 +28,8 @@ static void battery_callback(BatteryChargeState state) {
   s_battery_level = state.charge_percent;
 
   // Hide the battery icon by default
-  layer_set_hidden(bitmap_layer_get_layer(s_battery_icon_layer), s_battery_level >= 30);
+  layer_set_hidden(
+    bitmap_layer_get_layer(s_battery_icon_layer), s_battery_level >= 30);
 
   // This vibrate on every check. Need to set this to only vibrate once.
   // notify the user
@@ -156,7 +157,8 @@ static void main_window_load(Window *window) {
 //    text_layer_get_layer(s_weather_layer));
 
   // Create battery icon Layer
-  s_battery_icon_layer = bitmap_layer_create(GRect(58, 45, 30, 30));
+  s_battery_icon_layer = bitmap_layer_create(
+    GRect(PBL_IF_ROUND_ELSE(76, 58), PBL_IF_ROUND_ELSE(50, 45), 30, 30));
   s_battery_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BATTERY_ICON);
   bitmap_layer_set_bitmap(s_battery_icon_layer, s_battery_icon_bitmap);
 
