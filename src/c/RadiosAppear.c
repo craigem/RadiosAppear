@@ -167,7 +167,8 @@ static void main_window_load(Window *window) {
   s_bt_icon_bitmap = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BT_ICON);
 
   // Create the Bitmaplayer to display the GBitmap
-  s_bt_icon_layer = bitmap_layer_create(GRect(58, 5, 30, 30));
+  s_bt_icon_layer = bitmap_layer_create(
+    GRect(PBL_IF_ROUND_ELSE(75, 58), 5, 30, 30));
   bitmap_layer_set_bitmap(s_bt_icon_layer, s_bt_icon_bitmap);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_bt_icon_layer));
 
